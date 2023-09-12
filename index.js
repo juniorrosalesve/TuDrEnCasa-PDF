@@ -33,7 +33,7 @@ app.post('/generar-cotizacion', async (req, res) => {
 
     var mailOptions = {
         from: 'TuDrEnCasa Cotización <noreplywebsiteall@gmail.com>',
-        to: [data.agentEmail, 'conceptodigital08@gmail.com'],
+        to: [data.agentEmail, 'mariamgabrie@gmail.com'],
         subject: 'TuDrEnCasa Nueva Cotización '+xxxDate.getTime(),
         html: '<h1>Puede ver la cotización en el archivo adjunto.</h1>',
         attachments: [
