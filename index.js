@@ -45,9 +45,9 @@ app.post('/generar-cotizacion', async (req, res) => {
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-            res.send('<script>alert("Ocurrio un error, intente nuevamente.");location.href="http://127.0.0.1:7777"</script>');
+            res.send('<script>alert("Ocurrio un error, intente nuevamente.");location.href="https://tudrencasa.conceptodigital.org/"</script>');
         } else {
-            res.send('<script>alert("Envíado correctamente!");location.href="http://127.0.0.1:7777"</script>');
+            res.send('<script>alert("Envíado correctamente!");location.href="https://tudrencasa.conceptodigital.org/"</script>');
         }
     });
     // return res.sendStatus(200);
