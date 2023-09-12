@@ -6,7 +6,7 @@ const { writeFileSync, readFileSync } = require("fs");
 const nodemailer = require('nodemailer');
 
 const app = express()
-const port = 7777;
+const port = 7774;
 
 var transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
