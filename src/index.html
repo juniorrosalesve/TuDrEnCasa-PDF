@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuDrEnCasa - Cotización</title>
+    
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="w-[80%] md:w-[50%] mx-auto">
+        <div class="flex justify-between">
+            <div class="my-auto">
+                <h1 class="text-3xl text-blue-800">Propuesta económica</h1>
+            </div>
+            <div>
+                <img src="./css/logo.png" class="w-[200px] md:w-32" alt="logo" />
+            </div>
+        </div>
+        <form action="http://127.0.0.1:7777/generar-cotizacion" method="POST">
+            <h1 class="text-2xl text-blue-800 italic mb-3">Datos del solicitante</h1>
+            <div class="md:flex gap-3">
+                <div class="md:flex-none my-auto text-lg italic">
+                    <label class="block mb-2 font-medium text-gray-900">
+                        Nombre y Apellido
+                    </label>
+                </div>
+                <div class="md:flex-1">
+                    <input required type="text" name="name" value="Mariam Rosales" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                </div>
+            </div>
+            <div class="md:flex md:gap-3 mt-3">
+                <div class="md:flex-none my-auto text-lg italic">
+                    <label class="block mb-2 font-medium text-gray-900">
+                        Dirección
+                    </label>
+                </div>
+                <div class="md:flex-1">
+                    <input required type="text" name="address" value="Ciudad varyna sector ceiba 4to portón a la derecha casa g20" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:flex md:gap-3 mt-3">
+                    <div class="md:flex-none my-auto text-lg italic">
+                        <label class="block mb-2 font-medium text-gray-900">
+                            Teléfono
+                        </label>
+                    </div>
+                    <div class="md:flex-1">
+                        <input required type="text" name="phone" value="04245271843" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    </div>
+                </div>
+                <div class="md:flex md:gap-3 mt-3">
+                    <div class="md:flex-none my-auto text-lg italic">
+                        <label class="block mb-2 font-medium text-gray-900">
+                            Correo
+                        </label>
+                    </div>
+                    <div class="md:flex-1">
+                        <input required type="text" name="email" value="mariamgabrie@gmail.com" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    </div>
+                </div>
+            </div>
+            <div class="md:flex md:gap-3 mt-3">
+                <div class="md:flex-none my-auto text-lg italic">
+                    <label class="block mb-2 font-medium text-gray-900">
+                        Grupo
+                    </label>
+                </div>
+                <div class="md:flex-1">
+                    <select name="plan" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="" selected>Elige una tarifa</option>
+                        <option value="Tarifa anual 1 afiliado">Tarifa anual 1 afiliado</option>
+                        <option value="Tarifa anual 3 afiliados">Tarifa anual 3 afiliados</option>
+                        <option value="Tarifa anual 5 afiliados">Tarifa anual 5 afiliados</option>
+                        <option value="Tarifa anual 10 afiliados">Tarifa anual 10 afiliados</option>
+                    </select>
+                </div>
+            </div>
+            
+            <h1 class="text-2xl text-blue-800 italic my-3">Datos del agente</h1>
+            <div class="md:flex gap-3 mt-3">
+                <div class="md:flex-none my-auto text-lg italic">
+                    <label class="block mb-2 font-medium text-gray-900">
+                        Agente
+                    </label>
+                </div>
+                <div class="md:flex-1">
+                    <input required type="text" name="agent" value="Juan Gomez" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:flex md:gap-3 mt-3">
+                    <div class="md:flex-none my-auto text-lg italic">
+                        <label class="block mb-2 font-medium text-gray-900">
+                            Teléfono
+                        </label>
+                    </div>
+                    <div class="md:flex-1">
+                        <input required type="text" name="agentPhone" value="+573102144531" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    </div>
+                </div>
+                <div class="md:flex md:gap-3 mt-3">
+                    <div class="md:flex-none my-auto text-lg italic">
+                        <label class="block mb-2 font-medium text-gray-900">
+                            Correo
+                        </label>
+                    </div>
+                    <div class="md:flex-1">
+                        <input required type="text" name="agentEmail" value="juniorrosales1908@gmail.com" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    </div>
+                </div>
+            </div>
+            <center>
+                <button required type="submit" class="mt-10 w-[100px] px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                    Envíar
+                </button>
+            </center>
+            <br />
+        </form>
+    </div>
+</body>
+</html>
