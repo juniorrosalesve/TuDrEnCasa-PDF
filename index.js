@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const app = express()
 const port = 7774;
 
-const DEV   =   true;
+const DEV   =   false;
 
 const URL   =   (DEV ? 'http://127.0.0.1:7774/' : 'https://tudrencasa.conceptodigital.org/');
 
