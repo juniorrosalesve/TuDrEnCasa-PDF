@@ -597,6 +597,10 @@ video {
   width: 85%;
 }
 
+.w-\[80\%\] {
+  width: 80%;
+}
+
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
