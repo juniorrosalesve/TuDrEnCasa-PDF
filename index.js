@@ -123,34 +123,34 @@ async function createPDF(data) {
     });
 
     usePage.moveTo(288, 469);
-    usePage.drawText("$"+(data.inicial), {
+    usePage.drawText("$"+(data.inicial).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
     usePage.moveTo(288, 444);
-    usePage.drawText("$"+(data.inicial/2), {
+    usePage.drawText("$"+(data.inicial/2).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
     usePage.moveTo(288, 418);
-    usePage.drawText("$"+(data.inicial/4), {
+    usePage.drawText("$"+(data.inicial/4).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
 
 
     usePage.moveTo(426, 469);
-    usePage.drawText("$"+(data.ideal), {
+    usePage.drawText("$"+(data.ideal).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
     usePage.moveTo(426, 444);
-    usePage.drawText("$"+(data.ideal/2), {
+    usePage.drawText("$"+(data.ideal/2).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
     usePage.moveTo(426, 418);
-    usePage.drawText("$"+(data.ideal/4), {
+    usePage.drawText("$"+(data.ideal/4).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
