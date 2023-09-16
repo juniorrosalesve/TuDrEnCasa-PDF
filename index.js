@@ -21,7 +21,8 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-app.use(bodyParser.urlencoded({extended:false}))
+app.use(express.json());
+app.use(express.urlencoded());
 
 app.post('/generar-cotizacion', async (req, res) => {
     const data  =   req.body;
