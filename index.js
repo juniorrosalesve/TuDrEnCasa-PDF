@@ -28,10 +28,10 @@ app.post('/generar-cotizacion', async (req, res) => {
     const data  =   req.body;
     console.log(data);
     res.sendStatus(200)
-    //createPDF(data).catch((err) => console.log(err));
+    createPDF(data).catch((err) => console.log(err));
 
     var xxxDate     =   new Date();
-    /*let mailInfo    =   '<h4>Estimado(a) '+data.agent+'</h4>';
+    let mailInfo    =   '<h4>Estimado(a) '+data.agent+'</h4>';
     mailInfo    +=  '<p>Adjuntamos al presente, propuesta económica para plan de salud Domiciliario, en Tu Dr. en Casa, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad.</p>';
     mailInfo    +=  '<p style="font-weight: 700; font-style: italic;">Requisitos de Afiliación:</p>';
     mailInfo    +=  '<ul><li>Llenar el formato de afiliaciones</li><li>Copia de documento de identificación de los solicitantes.</li></ul>';
@@ -58,7 +58,6 @@ app.post('/generar-cotizacion', async (req, res) => {
             return res.sendStatus(200);
         }
     });
-    */
 })
 
 app.listen(port, () => {
