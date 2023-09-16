@@ -1,4 +1,4 @@
-const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
+const { degrees, PDFDocument, rgb, StandardFonts } = require("pdf-lib");
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -23,12 +23,6 @@ var transporter = nodemailer.createTransport({
 
 app.use(bodyParser.urlencoded({extended:false}))
 
-app.use(express.static(path.join(__dirname, 'src')));
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/src/index.html'));
-});
-
 app.post('/generar-cotizacion', async (req, res) => {
     const data  =   req.body;
     createPDF(data).catch((err) => console.log(err));
@@ -49,19 +43,19 @@ app.post('/generar-cotizacion', async (req, res) => {
         html: mailInfo,
         attachments: [
             { 
-                filename: 'nueva_cotzación'+xxxDate+'.pdf',
+                filename: 'Propuesta '+data.name+' / '+data.agent+'.pdf',
                 path: './pdf/cotizacion_new.pdf'
             }
         ]
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-            res.send('<script>alert("Ocurrio un error, intente nuevamente.");location.href="'+URL+'"</script>');
+            return res.sendStatus(500);
         } else {
-            res.send('<script>alert("Envíado correctamente!");location.href="'+URL+'"</script>');
+            return res.sendStatus(200);
         }
     });
-    // return res.sendStatus(200);
+    
 })
 
 app.listen(port, () => {
@@ -126,85 +120,41 @@ async function createPDF(data) {
         size: 11,
     });
 
-
-    let actualPlan  =   0;
-    for(var i = 0; i < planes.length; i++)
-    {
-        if(planes[i] == data.plan)
-        {
-            actualPlan = i;
-            break;
-        }
-    }
-
     usePage.moveTo(288, 469);
-    usePage.drawText("$"+(inicial[actualPlan]), {
+    usePage.drawText("$"+(data.inicial), {
         // font: courierBoldFont,
         size: 11,
     });
     usePage.moveTo(288, 444);
-    usePage.drawText("$"+(inicial[actualPlan]/2), {
+    usePage.drawText("$"+(data.inicial/2), {
         // font: courierBoldFont,
         size: 11,
     });
     usePage.moveTo(288, 418);
-    usePage.drawText("$"+(inicial[actualPlan]/4), {
+    usePage.drawText("$"+(data.inicial/4), {
         // font: courierBoldFont,
         size: 11,
     });
 
 
     usePage.moveTo(426, 469);
-    usePage.drawText("$"+(ideal[actualPlan]), {
+    usePage.drawText("$"+(data.ideal), {
         // font: courierBoldFont,
         size: 11,
     });
     usePage.moveTo(426, 444);
-    usePage.drawText("$"+(ideal[actualPlan]/2), {
+    usePage.drawText("$"+(data.ideal/2), {
         // font: courierBoldFont,
         size: 11,
     });
     usePage.moveTo(426, 418);
-    usePage.drawText("$"+(ideal[actualPlan]/4), {
+    usePage.drawText("$"+(data.ideal/4), {
         // font: courierBoldFont,
         size: 11,
     });
   
     writeFileSync("./pdf/cotizacion_new.pdf", await document.save());
 }
-
-
-const planes    =   [
-    "Tarifa anual 1 afiliado"
-]
-for(var i = 2; i <= 10; i++)
-    planes.push("Tarifa anual "+i+" afiliados");
-const inicial    =   [
-    "195",
-    "390",
-    "556",
-    "741",
-    "878",
-    "1053",
-    "1129",
-    "1404",
-    "1580",
-    "1658"
-];
-const ideal     =   [
-    "295",
-    "590",
-    "841",
-    "1121",
-    "1328",
-    "1593",
-    "1859",
-    "2124",
-    "2390",
-    "2508"
-];
-
-
 
 function getStringDate() {
     let today = new Date();
@@ -222,14 +172,3 @@ function getStringDate() {
     }
     return dd + '/' + mm + '/' + yyyy;
 }
-
-function formatAMPM(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime;
-  }
