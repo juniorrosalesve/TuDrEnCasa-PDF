@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 
 app.post('/generar-cotizacion', async (req, res) => {
     const data  =   req.body;
+    console.log(data);
     createPDF(data).catch((err) => console.log(err));
 
     var xxxDate     =   new Date();
