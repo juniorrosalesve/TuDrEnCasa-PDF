@@ -8,9 +8,7 @@ const nodemailer = require('nodemailer');
 const app = express()
 const port = 7774;
 
-const DEV   =   false;
-
-const URL   =   (DEV ? 'http://127.0.0.1:7774/' : 'https://tudrencasa.conceptodigital.org/');
+const DEV   =   true;
 
 var transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -41,7 +39,8 @@ app.post('/generar-cotizacion', async (req, res) => {
 
     var mailOptions = {
         from: 'TuDrEnCasa Cotización <noreplywebsiteall@gmail.com>',
-        to: [data.agentEmail, 'cotizacionestdg.ve@gmail.com'],
+        // to: [data.agentEmail, 'cotizacionestdg.ve@gmail.com'],
+        to: [data.agentEmail],
         subject: 'Propuesta '+data.name+' / Agente '+data.agent,
         html: mailInfo,
         attachments: [
@@ -74,82 +73,82 @@ async function createPDF(data) {
         size: 11,
     });
   
-    usePage.moveTo(191, 702);
+    usePage.moveTo(191, 709);
     usePage.drawText(data.name, {
         // font: courierBoldFont,
         size: 11,
     });
 
-    usePage.moveTo(122, 673);
+    usePage.moveTo(122, 680);
     usePage.drawText(data.address, {
         // font: courierBoldFont,
         size: 11,
     });
 
-    usePage.moveTo(122, 645);
+    usePage.moveTo(122, 652);
     usePage.drawText(data.phone, {
         // font: courierBoldFont,
         size: 11,
     });
 
-    usePage.moveTo(290, 645);
+    usePage.moveTo(290, 652);
     usePage.drawText(data.email, {
         // font: courierBoldFont,
         size: 11,
     });
 
-    usePage.moveTo(123, 615);
+    usePage.moveTo(123, 622);
     usePage.drawText(data.plan, {
         // font: courierBoldFont,
         size: 11,
     });
 
-    usePage.moveTo(122, 568);
+    usePage.moveTo(122, 576);
     usePage.drawText(data.agent, {
         // font: courierBoldFont,
         size: 11,
     });
 
-    usePage.moveTo(122, 541);
+    usePage.moveTo(122, 548);
     usePage.drawText(data.agentPhone, {
         // font: courierBoldFont,
         size: 11,
     });
 
-    usePage.moveTo(290, 541);
+    usePage.moveTo(290, 548);
     usePage.drawText(data.agentEmail, {
         // font: courierBoldFont,
         size: 11,
     });
 
-    usePage.moveTo(288, 469);
+    usePage.moveTo(288, 476);
     usePage.drawText("$"+(data.inicial).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
-    usePage.moveTo(288, 444);
+    usePage.moveTo(288, 451);
     usePage.drawText("$"+(data.inicial/2).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
-    usePage.moveTo(288, 418);
+    usePage.moveTo(288, 425);
     usePage.drawText("$"+(data.inicial/4).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
 
 
-    usePage.moveTo(426, 469);
+    usePage.moveTo(426, 476);
     usePage.drawText("$"+(data.ideal).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
-    usePage.moveTo(426, 444);
+    usePage.moveTo(426, 451);
     usePage.drawText("$"+(data.ideal/2).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
     });
-    usePage.moveTo(426, 418);
+    usePage.moveTo(426, 425);
     usePage.drawText("$"+(data.ideal/4).toFixed(2), {
         // font: courierBoldFont,
         size: 11,
