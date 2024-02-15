@@ -51,6 +51,7 @@ app.post('/generar-cotizacion', async (req, res) => {
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
+            console.log('Error al enviar el correo: ', error);
             return res.sendStatus(500);
         } else {
             console.log("Enviado correctamente al correo");
