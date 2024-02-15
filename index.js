@@ -53,6 +53,7 @@ app.post('/generar-cotizacion', async (req, res) => {
         if (error) {
             return res.sendStatus(500);
         } else {
+            console.log("Enviado correctamente al correo");
             return res.sendStatus(200);
         }
     });
