@@ -25,7 +25,6 @@ app.use(express.urlencoded());
 app.post('/generar-cotizacion', async (req, res) => {
     const data  =   req.body;
     console.log(data);
-    res.sendStatus(200)
     createPDF(data).catch((err) => console.log(err));
 
     var xxxDate     =   new Date();
