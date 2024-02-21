@@ -116,7 +116,12 @@ function iniciarWhatsapp() {
     //         executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     //     }
     // });
-    whatsapp = new Client();
+    whatsapp = new Client({
+        puppeteer: {
+            headless: true,
+            args: ['--no-sandbox']
+        }
+    });
   
     whatsapp.on('qr', (qr) => {
       qrcode.toString(qr, {type: 'svg', scale: 1}, function (err, svg) {
