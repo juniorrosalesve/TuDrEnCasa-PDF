@@ -70,16 +70,16 @@ app.post('/generar-cotizacion', async (req, res) => {
             const agentNumero   =   '58'+data[0].agentPhone;
             if(agentNumero == '584143027250' || agentNumero == '584245718777' || agentNumero == '584142073145' || agentNumero == '584241764348' || agentNumero == '584120208119') {
                 setTimeout(() => {
-                    enviarMensaje(data[0].agentPhone+"@c.us", 'Estimado cliente '+data[0].agent+' Un placer saludarle, mi nombre es Christopher Reyes del Equipo de Tu Dr. En Casa 👨🏻‍⚕️🏡 Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener.');
+                    enviarMensaje(agentNumero+"@c.us", 'Estimado cliente '+data[0].agent+' Un placer saludarle, mi nombre es Christopher Reyes del Equipo de Tu Dr. En Casa 👨🏻‍⚕️🏡 Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener.');
                 }, 5000);
                 setTimeout(() => {
-                    enviarMensaje(data[0].agentPhone+"@c.us", "Estimado cliente "+data[0].agent+" Un placer saludarle, mi nombre es Christopher Reyes del Equipo de Tu Dr. En Casa 👨🏻‍⚕️🏡 Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición.");
+                    enviarMensaje(agentNumero+"@c.us", "Estimado cliente "+data[0].agent+" Un placer saludarle, mi nombre es Christopher Reyes del Equipo de Tu Dr. En Casa 👨🏻‍⚕️🏡 Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición.");
                 }, 1 * 60 * 1000);
                 setTimeout(() => {
-                    enviarVideo(data[0].agentPhone+"@c.us")
+                    enviarVideo(agentNumero+"@c.us")
                 }, 2 * 60 * 1000)
                 setTimeout(() => {
-                    enviarImagen(data[0].agentPhone+"@c.us")
+                    enviarImagen(agentNumero+"@c.us")
                 }, 3 * 60 * 1000)
             }
             return res.sendStatus(200);
