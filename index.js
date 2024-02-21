@@ -118,8 +118,7 @@ function iniciarWhatsapp() {
     // });
     whatsapp = new Client({
         puppeteer: {
-            headless: true,
-            args: ['--no-sandbox']
+            executablePath: '/usr/bin/chromium-browser'
         }
     });
   
