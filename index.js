@@ -111,11 +111,12 @@ app.post('/upload-pdf', upload.single('file'), (req, res) => {
 });
 
 function iniciarWhatsapp() {
-    whatsapp = new Client({
-        puppeteer: {
-            executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-        }
-    });
+    // whatsapp = new Client({
+    //     puppeteer: {
+    //         executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    //     }
+    // });
+    whatsapp = new Client();
   
     whatsapp.on('qr', (qr) => {
       qrcode.toString(qr, {type: 'svg', scale: 1}, function (err, svg) {
