@@ -9,6 +9,7 @@ const nodemailer = require('nodemailer');
 const multer  = require('multer');
 const { Client, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
+const cron = require('node-cron');
 
 const app = express()
 const port = 7774;
@@ -42,6 +43,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+let seguimiento = {};
+let conteo  =   {};
+
+let numeros     =   [
+    '584143027250',
+    '584245718777',
+    '584142073145',
+    '584241764348',
+    '584120208119',
+    '573102144531'
+];
+
 app.use('/pdf', express.static('pdf'));
 app.post('/generar-cotizacion', async (req, res) => {
     const data  =   req.body;
@@ -67,20 +80,30 @@ app.post('/generar-cotizacion', async (req, res) => {
             return res.sendStatus(500);
         } else {
             console.log("Enviado correctamente al correo");
-            const agentNumero   =   '58'+data[0].agentPhone;
-            if(agentNumero == '584143027250' || agentNumero == '584245718777' || agentNumero == '584142073145' || agentNumero == '584241764348' || agentNumero == '584120208119') {
+            const clientNumber   =   data[0].phone;
+            if(clientNumber == '584143027250' || clientNumber == '584245718777' || clientNumber == '584142073145' || clientNumber == '584241764348' || clientNumber == '584120208119' || clientNumber == '573102144531' || clientNumber == '584124955548') {
+                if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
+                    seguimiento[clientNumber] = true;
                 setTimeout(() => {
-                    enviarMensaje(agentNumero+"@c.us", 'Estimado cliente '+data[0].agent+' Un placer saludarle, mi nombre es Christopher Reyes del Equipo de Tu Dr. En Casa 👨🏻‍⚕️🏡 Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener.');
+                    if(seguimiento[clientNumber] == true)
+                        enviarMensaje(clientNumber+"@c.us", 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
                 }, 5000);
                 setTimeout(() => {
-                    enviarMensaje(agentNumero+"@c.us", "Estimado cliente "+data[0].agent+" Un placer saludarle, mi nombre es Christopher Reyes del Equipo de Tu Dr. En Casa 👨🏻‍⚕️🏡 Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición.");
-                }, 1 * 60 * 1000);
+                    if(seguimiento[clientNumber] == true)
+                        enviarVideo(clientNumber+"@c.us")
+                }, 1 * 60 * 1000)
                 setTimeout(() => {
-                    enviarVideo(agentNumero+"@c.us")
+                    if(seguimiento[clientNumber] == true)
+                        enviarImagen(clientNumber+"@c.us")
                 }, 2 * 60 * 1000)
                 setTimeout(() => {
-                    enviarImagen(agentNumero+"@c.us")
-                }, 3 * 60 * 1000)
+                    if(seguimiento[clientNumber] == true)
+                        enviarMensaje(clientNumber+"@c.us", "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición. ");
+                }, 3 * 60 * 1000); 
+                if(conteo[agentNumber] == undefined)
+                    conteo[agentNumber] =   data[0].name;
+                else
+                    conteo[agentNumber] =   conteo[agentNumber]+' '+data[0].name;
             }
             return res.sendStatus(200);
         }
@@ -110,19 +133,20 @@ app.post('/upload-pdf', upload.single('file'), (req, res) => {
     res.sendStatus(200);
 });
 
+
 function iniciarWhatsapp() {
-    // whatsapp = new Client({
-    //     puppeteer: {
-    //         executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    //     }
-    // });
     whatsapp = new Client({
         puppeteer: {
-            executablePath: '/usr/bin/chromium-browser',
-            headless: true,
-            args: ['--no-sandbox']
+            executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
         }
     });
+    // whatsapp = new Client({
+    //     puppeteer: {
+    //         executablePath: '/usr/bin/chromium-browser',
+    //         headless: true,
+    //         args: ['--no-sandbox']
+    //     }
+    // });
   
     whatsapp.on('qr', (qr) => {
       qrcode.toString(qr, {type: 'svg', scale: 1}, function (err, svg) {
@@ -187,6 +211,29 @@ app.listen(port, () => {
     console.log(`Cotizador tu drencasa corriendo http://localhost:${port}/`)
 })
 iniciarWhatsapp();
+cron.schedule('*/15 * * * *', function() {
+    for(i = 0; i < numeros.length; i++) {
+        if(conteo[numeros[i]] != undefined) {
+            if(conteo[numeros[i]] != null) {
+                enviarMensaje(numeros[i]+"@.us", "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
+                conteo[numeros[i]] =   null;
+            }
+            else 
+                enviarMensaje(numeros[i]+"@.us", "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
+        }
+    }
+});
+
+whatsapp.on('message', (message) => {
+    const numero = message.from;
+    const texto = message.body;
+
+    // Verificar si el mensaje es el comando de cancelación
+    if(texto == '/finalizar' || text == '/FINALIZAR') {
+        seguimiento[numero] = false;
+        whatsapp.sendMessage(numero, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
+    }
+});
 
 // Enviar un mensaje de texto
 function enviarMensaje(numero, mensaje) {
