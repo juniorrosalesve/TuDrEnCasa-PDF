@@ -215,16 +215,16 @@ app.listen(port, () => {
     console.log(`Cotizador tu drencasa corriendo http://localhost:${port}/`)
 })
 iniciarWhatsapp();
-cron.schedule('*/10 * * * *', function() {
-    for(i = 0; i < numeros.length; i++) {
-        if(conteo[numeros[i]] != undefined && conteo[numeros] != null) {
-            whatsapp.sendMessage(numeros[i]+"@c.us", "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
-            conteo[numeros[i]] =   null;
-        }
-        else 
-            whatsapp.sendMessage(numeros[i]+"@c.us", "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
-    }
-});
+// cron.schedule('*/10 * * * *', function() {
+//     for(i = 0; i < numeros.length; i++) {
+//         if(conteo[numeros[i]] != undefined && conteo[numeros] != null) {
+//             whatsapp.sendMessage(numeros[i]+"@c.us", "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
+//             conteo[numeros[i]] =   null;
+//         }
+//         else 
+//             whatsapp.sendMessage(numeros[i]+"@c.us", "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
+//     }
+// });
 
 whatsapp.on('message', (message) => {
     const numero = message.from;
