@@ -145,7 +145,10 @@ function iniciarWhatsapp() {
         puppeteer: {
             executablePath: '/usr/bin/chromium-browser',
             headless: true,
-            args: ['--no-sandbox']
+            args: ['--no-sandbox'],
+            env: {
+                DISPLAY: ":10.0"
+            }
         }
     });
   
