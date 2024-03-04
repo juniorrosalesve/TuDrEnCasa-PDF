@@ -22,8 +22,8 @@ var transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     auth: {
-        user: "contacto@conceptodigital.org",
-        pass: "hmiwuhasvhpfsmlv"
+        user: "cotizacionestdg.ve@gmail.com",
+        pass: "aocomxuabystytbh"
     }
 });
 
@@ -62,7 +62,7 @@ app.post('/generar-cotizacion', async (req, res) => {
 
     let mailInfo    =   reemplazarVariables(data[3].body, data[0]);
     var mailOptions = {
-        from: 'TuDrEnCasa Cotización <contacto@conceptodigital.org>',
+        from: 'TuDrEnCasa Cotización <cotizacionestdg.ve@gmail.com>',
         to: [data[0].agentEmail, 'cotizacionestdg.ve@gmail.com'],
         // to: [data[0].agentEmail],
         subject: reemplazarVariables(data[3].subject, data[0]),
