@@ -74,37 +74,37 @@ app.post('/generar-cotizacion', async (req, res) => {
             }
         ]
     };
+    const clientNumber   =   data[0].phone;
+    if(clientNumber == '584143027250' || clientNumber == '584245718777' || clientNumber == '584142073145' || clientNumber == '584241764348' || clientNumber == '584120208119' || clientNumber == '573102144531' || clientNumber == '584124955548') {
+        if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
+            seguimiento[clientNumber] = true;
+        setTimeout(() => {
+            if(seguimiento[clientNumber] == true)
+                enviarMensaje(clientNumber+"@c.us", 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
+        }, 5000);
+        setTimeout(() => {
+            if(seguimiento[clientNumber] == true)
+                enviarVideo(clientNumber+"@c.us")
+        }, 1 * 60 * 1000)
+        setTimeout(() => {
+            if(seguimiento[clientNumber] == true)
+                enviarImagen(clientNumber+"@c.us")
+        }, 2 * 60 * 1000)
+        setTimeout(() => {
+            if(seguimiento[clientNumber] == true)
+                enviarMensaje(clientNumber+"@c.us", "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición. ");
+        }, 3 * 60 * 1000); 
+        if(conteo[agentNumber] == undefined)
+            conteo[agentNumber] =   data[0].name;
+        else
+            conteo[agentNumber] =   conteo[agentNumber]+' '+data[0].name;
+    }
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log('Error al enviar el correo: ', error);
             return res.sendStatus(500);
         } else {
             console.log("Enviado correctamente al correo");
-            const clientNumber   =   data[0].phone;
-            if(clientNumber == '584143027250' || clientNumber == '584245718777' || clientNumber == '584142073145' || clientNumber == '584241764348' || clientNumber == '584120208119' || clientNumber == '573102144531' || clientNumber == '584124955548') {
-                if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
-                    seguimiento[clientNumber] = true;
-                setTimeout(() => {
-                    if(seguimiento[clientNumber] == true)
-                        enviarMensaje(clientNumber+"@c.us", 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
-                }, 5000);
-                setTimeout(() => {
-                    if(seguimiento[clientNumber] == true)
-                        enviarVideo(clientNumber+"@c.us")
-                }, 1 * 60 * 1000)
-                setTimeout(() => {
-                    if(seguimiento[clientNumber] == true)
-                        enviarImagen(clientNumber+"@c.us")
-                }, 2 * 60 * 1000)
-                setTimeout(() => {
-                    if(seguimiento[clientNumber] == true)
-                        enviarMensaje(clientNumber+"@c.us", "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición. ");
-                }, 3 * 60 * 1000); 
-                if(conteo[agentNumber] == undefined)
-                    conteo[agentNumber] =   data[0].name;
-                else
-                    conteo[agentNumber] =   conteo[agentNumber]+' '+data[0].name;
-            }
             return res.sendStatus(200);
         }
     });
