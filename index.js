@@ -272,8 +272,6 @@ async function createPDF(data, params, testing = false) {
     const usePage   =   document.getPage(1);
     
     for(let i = 0; i < params.length; i++) {
-        console.log(data[i]);
-        console.log(params[i]);
         if(i <= 8) {
             usePage.moveTo(coordenates(params[i], 1), coordenates(params[i], 0));
             if(i == 0)
