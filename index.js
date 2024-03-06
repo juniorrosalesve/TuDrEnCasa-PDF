@@ -148,7 +148,8 @@ function iniciarWhatsapp() {
             args: ['--no-sandbox'],
             env: {
                 DISPLAY: ":10.0"
-            }
+            },
+            timeout: 60000 // Aumentar el tiempo de espera a 60 segundos
         }
     });
   
