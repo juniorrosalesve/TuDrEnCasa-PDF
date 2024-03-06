@@ -227,17 +227,17 @@ app.listen(port, () => {
 //     }
 // });
 
-whatsapp.on('message', (message) => {
-    const numero = message.from;
-    const texto = message.body;
+// whatsapp.on('message', (message) => {
+//     const numero = message.from;
+//     const texto = message.body;
 
-    // Verificar si el mensaje es el comando de cancelación
-    if(texto == 'finalizar' || text == 'FINALIZAR') {
-        console.log('Mensaje finalizado del numero: ', numero);
-        seguimiento[numero] = false;
-        whatsapp.sendMessage(numero, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
-    }
-});
+//     // Verificar si el mensaje es el comando de cancelación
+//     if(texto == 'finalizar' || text == 'FINALIZAR') {
+//         console.log('Mensaje finalizado del numero: ', numero);
+//         seguimiento[numero] = false;
+//         whatsapp.sendMessage(numero, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
+//     }
+// });
 
 // Enviar un mensaje de texto
 function enviarMensaje(numero, mensaje) {
