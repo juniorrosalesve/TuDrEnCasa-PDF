@@ -7,7 +7,7 @@ const fs = require('fs');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const multer  = require('multer');
-const venom = require('venom-bot');
+// const venom = require('venom-bot');
 const qrcode = require('qrcode');
 const cron = require('node-cron');
 
