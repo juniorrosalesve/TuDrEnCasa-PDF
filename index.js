@@ -7,7 +7,7 @@ const fs = require('fs');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const multer  = require('multer');
-const { Client, MessageMedia } = require('whatsapp-web.js');
+const venom = require('venom-bot');
 const qrcode = require('qrcode');
 const cron = require('node-cron');
 
