@@ -85,15 +85,15 @@ app.post('/generar-cotizacion', async (req, res) => {
         setTimeout(async () => {
             if(seguimiento[clientNumber + '@c.us'] == true)
                 enviarVideo(clientNumber)
-        }, 2 * 60 * 1000)
+        }, 10000)
         setTimeout(async () => {
             if(seguimiento[clientNumber + '@c.us'] == true)
                 await enviarImagen(clientNumber)
-        }, 4 * 60 * 1000)
+        }, 20000)
         setTimeout(async () => {
             if(seguimiento[clientNumber + '@c.us'] == true)
                 await enviarMensaje(clientNumber, "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición. ");
-        }, 6 * 60 * 1000); 
+        }, 30000); 
         if(conteo[agentNumber] == undefined)
             conteo[agentNumber] =   data[0].name;
         else
@@ -165,11 +165,11 @@ async function enviarMensaje(numero, mensaje) {
 }
 
 async function enviarImagen(numero) {
-    await client.sendFile(numero + '@c.us', 'day7.jpeg', 'image.jpg');
+    await client.sendFile(numero + '@c.us', './day7.jpeg', 'image.jpg');
 }
 
 async function enviarVideo(numero) {
-    await client.sendFile(numero + '@c.us', 'day3.mp4', 'video.mp4');
+    await client.sendFile(numero + '@c.us', './day3.mp4', 'video.mp4');
 }
 
 async function createPDF(data, params, testing = false) {
