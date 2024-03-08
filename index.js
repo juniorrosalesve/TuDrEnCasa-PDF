@@ -141,7 +141,7 @@ wa.create().then(c => {
     client = c;
 
     client.onMessage(async message => {
-        if (message.body === 'FINALIZAR' && seguimiento[message.from]) {
+        if (message.body.toLowerCase() === 'finalizar' && seguimiento[message.from]) {
             seguimiento[message.from] = false;
             await client.sendText(message.from, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
         }
@@ -165,11 +165,11 @@ async function enviarMensaje(numero, mensaje) {
 }
 
 async function enviarImagen(numero) {
-    await client.sendImage(numero + '@c.us', 'day7.jpeg', 'image.jpg');
+    await client.sendFile(numero + '@c.us', 'day7.jpeg', 'image.jpg');
 }
 
 async function enviarVideo(numero) {
-    await client.sendVideo(numero + '@c.us', 'day3.mp4', 'video.mp4');
+    await client.sendFile(numero + '@c.us', 'day3.mp4', 'video.mp4');
 }
 
 async function createPDF(data, params, testing = false) {
