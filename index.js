@@ -170,7 +170,8 @@ async function enviarImagen(numero) {
 }
 
 async function enviarVideo(numero) {
-    await client.sendFile(numero + '@c.us', './day3.mp4', 'video.mp4');
+    let videoBase64 = fs.readFileSync('day3.mp4', { encoding: 'base64' });
+    await client.sendFile(numero + '@c.us', videoBase64, 'video.mp4');
 }
 
 async function createPDF(data, params, testing = false) {
