@@ -77,7 +77,7 @@ app.post('/generar-cotizacion', async (req, res) => {
     if(clientNumber == '584143027250' || clientNumber == '584245718777' || clientNumber == '584142073145' || clientNumber == '584241764348' || clientNumber == '584120208119' || clientNumber == '573102144531' || clientNumber == '584124955548') {
         console.log("checking numero cliente: %s", clientNumber);
         if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
-            seguimiento[clientNumber] = true;
+            seguimiento[clientNumber + '@c.us'] = true;
         setTimeout(async () => {
             if(seguimiento[clientNumber] == true)
                 await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
