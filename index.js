@@ -80,12 +80,12 @@ app.post('/generar-cotizacion', async (req, res) => {
             seguimiento[clientNumber + '@c.us'] = true;
         setTimeout(async () => {
             if(seguimiento[clientNumber + '@c.us'] == true)
-                await enviarImagen(clientNumber)
+                await enviarVideo(clientNumber)
                 // await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
         }, 5000);
         // setTimeout(async () => {
         //     if(seguimiento[clientNumber + '@c.us'] == true)
-        //         enviarVideo(clientNumber)
+        //         await enviarVideo(clientNumber)
         // }, 10000)
         // setTimeout(async () => {
         //     if(seguimiento[clientNumber + '@c.us'] == true)
