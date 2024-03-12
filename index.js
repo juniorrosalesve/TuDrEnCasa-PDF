@@ -9,7 +9,7 @@ const nodemailer = require('nodemailer');
 const multer  = require('multer');
 const qrcode = require('qrcode');
 const cron = require('node-cron');
-// const wa = require('@open-wa/wa-automate');
+const wa = require('@open-wa/wa-automate');
 
 const app = express()
 const port = 7774;
