@@ -45,11 +45,6 @@ let seguimiento = {};
 let conteo  =   {};
 
 let numeros     =   [
-    '584143027250@c.us',
-    '584245718777@c.us',
-    '584142073145@c.us',
-    '584241764348@c.us',
-    '584120208119@c.us',
     '573102144531@c.us'
 ];
 
@@ -74,7 +69,7 @@ app.post('/generar-cotizacion', async (req, res) => {
     };
     const clientNumber      =   data[0].phone + '@c.us';
     const agentNumber       =   data[0].agentPhone + '@c.us';
-    if(clientNumber == '584143027250@c.us' || clientNumber == '584245718777@c.us' || clientNumber == '584142073145@c.us' || clientNumber == '584241764348@c.us' || clientNumber == '584120208119@c.us' || clientNumber == '573102144531@c.us' || clientNumber == '584124955548@c.us') {
+    if(clientNumber == '573102144531@c.us') {
         console.log("checking numero cliente: %s", clientNumber);
         if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
             seguimiento[clientNumber] = true;
