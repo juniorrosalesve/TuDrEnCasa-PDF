@@ -145,6 +145,8 @@ wa.create().then(c => {
             seguimiento[message.from] = false;
             await client.sendText(message.from, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
         }
+        if(message.body == '!ping')
+            await client.sendText(message.from, 'pong!');
     });
 });
 
