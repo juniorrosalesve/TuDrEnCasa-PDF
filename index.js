@@ -147,7 +147,7 @@ wa.create().then(c => {
 
 cron.schedule('*/5 * * * *', function() {
     for(i = 0; i < numeros.length; i++) {
-        if(conteo[numeros[i]] != undefined && conteo[numeros] != null) {
+        if(conteo[numeros[i]] != undefined && conteo[numeros[i]] != null) {
             enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
             conteo[numeros[i]] =   null;
         }
