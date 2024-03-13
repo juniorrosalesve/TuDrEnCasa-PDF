@@ -44,9 +44,7 @@ const upload = multer({ storage: storage });
 let seguimiento = {};
 let conteo  =   {};
 
-let numeros     =   [
-    '573102144531@c.us'
-];
+let numeros     =   [];
 
 app.use('/pdf', express.static('pdf'));
 app.post('/generar-cotizacion', async (req, res) => {
@@ -94,6 +92,8 @@ app.post('/generar-cotizacion', async (req, res) => {
                 if(seguimiento[clientNumber] == true)
                     await enviarMensaje(clientNumber, "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición.");
             }, 3 * 60 * 1000); 
+            if(!checkNumberAgent(agentNumber))
+                numeros.push(agentNumber);
             if(conteo[agentNumber] == undefined || conteo[agentNumber] == null)
                 conteo[agentNumber] = data[0].name;
             else
@@ -237,4 +237,15 @@ function reemplazarVariables(mensaje, variables) {
         mensaje = mensaje.replace(regex, valor);
     }
     return mensaje;
+}
+
+function checkNumberAgent(n) {
+    let exists  =   false;
+    for(var i = 0; i < numeros.length; i++) {
+        if(numeros[i] == n) {
+            exists  =   true;
+            break;
+        }
+    }
+    return exists;
 }
