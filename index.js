@@ -106,19 +106,19 @@ app.listen(port, () => {
     console.log(`Cotizador tu drencasa corriendo http://localhost:${port}/`)
 });
 
-wa.create().then(c => {
-    client = c;
+// wa.create().then(c => {
+//     client = c;
 
-    client.onMessage(async message => {
-        if (message.body.toLowerCase() === 'finalizar' && seguimiento[message.from]) {
-            console.log('[Cancelación] %s', message.from);
-            seguimiento[message.from] = false;
-            await client.sendText(message.from, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
-        }
-        if(message.body == '!ping')
-            await client.sendText(message.from, 'pong!');
-    });
-});
+//     client.onMessage(async message => {
+//         if (message.body.toLowerCase() === 'finalizar' && seguimiento[message.from]) {
+//             console.log('[Cancelación] %s', message.from);
+//             seguimiento[message.from] = false;
+//             await client.sendText(message.from, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
+//         }
+//         if(message.body == '!ping')
+//             await client.sendText(message.from, 'pong!');
+//     });
+// });
 
 // cron.schedule('*/10 * * * *', function() {
 //     for(i = 0; i < numeros.length; i++) {
