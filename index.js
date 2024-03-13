@@ -69,37 +69,35 @@ app.post('/generar-cotizacion', async (req, res) => {
     };
     const clientNumber      =   data[0].phone + '@c.us';
     const agentNumber       =   data[0].agentPhone + '@c.us';
-    if(clientNumber == '584124955548@c.us') {
-        console.log("[Nueva solicitud] De [%s - %s] para [%s - %s]", data[0].agent, agentNumber, data[0].name, clientNumber);
-        if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
-            seguimiento[clientNumber] = true;
-        setTimeout(async () => {
-            if(seguimiento[clientNumber] == true)
-                await enviarMensaje(clientNumber, 'mensaje cliente 1');
-        }, 5000);
-        setTimeout(async () => {
-            if(seguimiento[clientNumber] == true)
-                await imagen1(clientNumber)
-        }, 1 * 60 * 1000)
-        setTimeout(async () => {
-            if(seguimiento[clientNumber] == true)
-                await imagen2(clientNumber)
-        }, 2 * 60 * 1000)
-        setTimeout(async () => {
-            if(seguimiento[clientNumber] == true)
-                await enviarMensaje(clientNumber, "mensaje cliente 2 ");
-        }, 3 * 60 * 1000); 
-        if(conteo[agentNumber] == undefined || conteo[agentNumber] == null)
-            conteo[agentNumber] = data[0].name;
-        else
-            conteo[agentNumber] = conteo[agentNumber] + ', ' + data[0].name;
-    }
+
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log('Error al enviar el correo: ', error);
             return res.sendStatus(500);
         } else {
-            console.log("Enviado correctamente al correo");
+            console.log("[Nueva solicitud] De [%s - %s] para [%s - %s]", data[0].agent, agentNumber, data[0].name, clientNumber);
+            if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
+                seguimiento[clientNumber] = true;
+            setTimeout(async () => {
+                if(seguimiento[clientNumber] == true)
+                    await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\n\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
+            }, 5000);
+            setTimeout(async () => {
+                if(seguimiento[clientNumber] == true)
+                    await imagen1(clientNumber)
+            }, 1 * 60 * 1000)
+            setTimeout(async () => {
+                if(seguimiento[clientNumber] == true)
+                    await imagen2(clientNumber)
+            }, 2 * 60 * 1000)
+            setTimeout(async () => {
+                if(seguimiento[clientNumber] == true)
+                    await enviarMensaje(clientNumber, "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición.");
+            }, 3 * 60 * 1000); 
+            if(conteo[agentNumber] == undefined || conteo[agentNumber] == null)
+                conteo[agentNumber] = data[0].name;
+            else
+                conteo[agentNumber] = conteo[agentNumber] + ', ' + data[0].name;
             return res.sendStatus(200);
         }
     });
@@ -125,13 +123,13 @@ wa.create().then(c => {
 
 cron.schedule('*/10 * * * *', function() {
     for(i = 0; i < numeros.length; i++) {
-        console.log("[Agente checking] %s", conteo[numeros[i]]);
+        console.log("[Agente checking]: %s", conteo[numeros[i]]);
         if(conteo[numeros[i]] != undefined && conteo[numeros[i]] != null) {
-            enviarMensaje(numeros[i], "mensaje agente 1: ("+conteo[numeros[i]]+")");
+            enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
             conteo[numeros[i]] =   null;
         }
         else 
-            enviarMensaje(numeros[i], "mensaje agente 2");
+            enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
     }
 });
 
