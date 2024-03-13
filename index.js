@@ -43,39 +43,7 @@ let conteo  =   {};
 
 let numeros     =   [];
 
-const API_URL = 'http://104.236.72.126:3000/api/v1/sessions';
-const SESSION_NAME = 'tudrencasa'; 
-
-app.get('/create-session', async (req, res) => {
-    try {
-        const response = await axios.post(`${API_URL}`, { sessionName: SESSION_NAME });
-        res.send(response.data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al crear la sesión');
-    }
-});
-
-app.get('/get-qr', async (req, res) => {
-    try {
-        const response = await axios.get(`${API_URL}/${SESSION_NAME}/qr`);
-        res.send(response.data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al obtener el código QR');
-    }
-});
-
-app.get('/send-message', async (req, res) => {
-    const { phone, message } = req.body;
-    try {
-        const response = await axios.post(`${API_URL}/${SESSION_NAME}/messages`, { phone, body: message });
-        res.send(response.data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al enviar el mensaje');
-    }
-});
+const WHATSAPP_URL  =   "http://104.236.72.126:3000/api";
 
 app.use('/pdf', express.static('pdf'));
 app.post('/generar-cotizacion', async (req, res) => {
@@ -105,12 +73,12 @@ app.post('/generar-cotizacion', async (req, res) => {
             return res.sendStatus(500);
         } else {
             console.log("[Nueva solicitud] De [%s - %s] para [%s - %s]", data[0].agent, agentNumber, data[0].name, clientNumber);
-            // if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
-            //     seguimiento[clientNumber] = true;
-            // setTimeout(async () => {
-            //     if(seguimiento[clientNumber] == true)
-            //         await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\n\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
-            // }, 5000);
+            if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
+                seguimiento[clientNumber] = true;
+            setTimeout(async () => {
+                if(seguimiento[clientNumber] == true)
+                    await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\n\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
+            }, 5000);
             // setTimeout(async () => {
             //     if(seguimiento[clientNumber] == true)
             //         await imagen1(clientNumber)
@@ -138,19 +106,19 @@ app.listen(port, () => {
     console.log(`Cotizador tu drencasa corriendo http://localhost:${port}/`)
 });
 
-// wa.create().then(c => {
-//     client = c;
+wa.create().then(c => {
+    client = c;
 
-//     client.onMessage(async message => {
-//         if (message.body.toLowerCase() === 'finalizar' && seguimiento[message.from]) {
-//             console.log('[Cancelación] %s', message.from);
-//             seguimiento[message.from] = false;
-//             await client.sendText(message.from, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
-//         }
-//         if(message.body == '!ping')
-//             await client.sendText(message.from, 'pong!');
-//     });
-// });
+    client.onMessage(async message => {
+        if (message.body.toLowerCase() === 'finalizar' && seguimiento[message.from]) {
+            console.log('[Cancelación] %s', message.from);
+            seguimiento[message.from] = false;
+            await client.sendText(message.from, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
+        }
+        if(message.body == '!ping')
+            await client.sendText(message.from, 'pong!');
+    });
+});
 
 // cron.schedule('*/10 * * * *', function() {
 //     for(i = 0; i < numeros.length; i++) {
@@ -164,9 +132,20 @@ app.listen(port, () => {
 //     }
 // });
 
-// async function enviarMensaje(numero, mensaje) {
-//     await client.sendText(numero, mensaje);
-// }
+async function enviarMensaje(numero, mensaje) {
+    let data = {
+        chatId: numero,
+        text: mensaje,
+        session: 'default'
+    };
+    axios.post(`${WHATSAPP_URL}/sendText`, data)
+    .then((response) => {
+        console.log("[Mensaje Enviado] To %s", numero);
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+}
 
 // async function imagen1(numero) {
 //     await client.sendImage(numero, './day3.png', 'image.jpg');
