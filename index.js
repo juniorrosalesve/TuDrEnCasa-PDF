@@ -15,7 +15,10 @@ const app = express()
 const port = 7774;
 
 const ws = new Client({
-    authStrategy: new LocalAuth()
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        args: ['--no-sandbox']
+    }
 });
 
 var transporter = nodemailer.createTransport({
