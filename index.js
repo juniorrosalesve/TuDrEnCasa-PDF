@@ -17,6 +17,8 @@ const port = 7774;
 const ws = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
+        executablePath: process.env.CHROME_BIN || undefined,
+        browserWSEndpoint: process.env.CHROME_WS || undefined,
         args: ['--no-sandbox'],
     }
 });
