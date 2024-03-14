@@ -15,7 +15,10 @@ const app = express()
 const port = 7774;
 
 const ws = new Client({
-    authStrategy: new LocalAuth()
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        args: ['--no-sandbox'],
+    }
 });
 
 var transporter = nodemailer.createTransport({
@@ -50,7 +53,7 @@ let numeros     =   [];
 
 ws.on('ready', () => {
     console.log('[Whatsapp Web] iniciado!');
-    enviarMensaje('573102144531@c.us', 'holaaa');
+    enviarMensaje('573102144531@c.us', 'holaaa!');
 });
 ws.on('qr', qr => {
     qrcode.generate(qr, {small: true});
