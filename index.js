@@ -153,9 +153,8 @@ async function enviarImagen(numero) {
 }
 
 async function enviarVideo(numero) {
-    const filePath = './day3.mp4'; // Reemplaza esto con la ruta a tu video
-    const fileData = fs.readFileSync(filePath, { encoding: 'base64' });
-    const media = new MessageMedia('video/mp4', fileData);
+    const xfile = fs.readFileSync("./day3.mp4");
+    const media = new MessageMedia('video/mp4', xfile);
     ws.sendMessage(numero, media);
 }
 
