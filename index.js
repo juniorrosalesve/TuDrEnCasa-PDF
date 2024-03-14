@@ -15,11 +15,7 @@ const app = express()
 const port = 7774;
 
 const ws = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        executablePath: '/usr/bin/chromium-browser',
-        args: ['--no-sandbox'],
-    }
+    authStrategy: new LocalAuth()
 });
 
 var transporter = nodemailer.createTransport({
@@ -55,7 +51,6 @@ let numeros     =   [];
 ws.on('ready', () => {
     console.log('[Whatsapp Web] iniciado!');
     enviarVideo('573102144531@c.us');
-    enviarVideo('584124955548@c.us');
 });
 ws.on('qr', qr => {
     qrcode.generate(qr, {small: true});
