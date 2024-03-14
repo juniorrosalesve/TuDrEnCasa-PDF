@@ -17,7 +17,7 @@ const port = 7774;
 const ws = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-        executablePath: '/usr/bin/chromium-browser',
+        executablePath: '/usr/bin/google-chrome-stable',
         args: ['--no-sandbox']
     }
 });
