@@ -53,7 +53,7 @@ let numeros     =   [];
 
 ws.on('ready', () => {
     console.log('[Whatsapp Web] iniciado!');
-    enviarMensaje('573102144531@c.us', 'holaaa!');
+    enviarVideo('573102144531@c.us');
 });
 ws.on('qr', qr => {
     qrcode.generate(qr, {small: true});
@@ -152,7 +152,9 @@ async function enviarImagen(numero) {
 }
 
 async function enviarVideo(numero) {
-    await ws.sendMessage(numero, MessageMedia.fromFilePath('./day3.mp4'));
+    const fileData = fs.readFileSync("./day3.mp4");
+    const media = new MessageMedia('video/mp4', fileData.toString('base64'), 'video.mp4');
+    ws.searchMessages(numero, media);
 }
 
 app.use('/pdf', express.static('pdf'));
