@@ -95,15 +95,15 @@ app.post('/generar-cotizacion', async (req, res) => {
             setTimeout(async () => {
                 if(seguimiento[clientNumber] == true)
                     await enviarVideo(clientNumber)
-            }, 1 * 60 * 1000)
+            }, 3 * 24 * 60 * 60 * 1000)
             setTimeout(async () => {
                 if(seguimiento[clientNumber] == true)
                     await enviarImagen(clientNumber)
-            }, 2 * 60 * 1000)
+            }, 5 * 24 * 60 * 60 * 1000)
             setTimeout(async () => {
                 if(seguimiento[clientNumber] == true)
                     await enviarMensaje(clientNumber, "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición.");
-            }, 3 * 60 * 1000); 
+            }, 7 * 24 * 60 * 60 * 1000); 
             if(!checkNumberAgent(agentNumber))
                 numeros.push(agentNumber);
             if(conteo[agentNumber] == undefined || conteo[agentNumber] == null)
@@ -128,33 +128,44 @@ ws.on('message_create', message => {
     }
 });
 
-cron.schedule('*/10 * * * *', function() {
+cron.schedule('0 16 * * 5', function() {
     for(i = 0; i < numeros.length; i++) {
-        console.log("[Agente checking]: %s", conteo[numeros[i]]);
         if(conteo[numeros[i]] != undefined && conteo[numeros[i]] != null) {
-            ws.sendMessage(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
+            enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
             conteo[numeros[i]] =   null;
         }
         else 
-            ws.sendMessage(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
+            enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
     }
 });
 
 
 async function enviarMensaje(numero, mensaje) {
-    await ws.sendMessage(numero, mensaje);
+    await ws.sendMessage(numero, mensaje).then(() => {
+        console.log('[Whatsapp Web] Mensaje enviado correctamente a : %s', numero);
+    }).catch((error) => {
+        console.error('[Whatsapp Web] Hubo un error al enviar el mensaje, posiblemente el número %s, %s', numero, error);
+    });
 }
 
 async function enviarImagen(numero) {
     const fileData = fs.readFileSync("./day7.jpeg");
     const media = new MessageMedia('image/jpg', fileData.toString('base64'), 'image.jpg');
-    await ws.sendMessage(numero, media);
+    await ws.sendMessage(numero, media).then(() => {
+        console.log('[Whatsapp Web] Imagen enviada correctamente a : %s', numero);
+    }).catch((error) => {
+        console.error('Hubo un error al enviar la imagen, posiblemente el número %s, %s', numero, error);
+    });
 }
 
 async function enviarVideo(numero) {
     const fileData = fs.readFileSync("./day3.mp4");
     const media = new MessageMedia('video/mp4', fileData.toString('base64'), 'video.mp4');
-    await ws.sendMessage(numero, media);
+    await ws.sendMessage(numero, media).then(() => {
+        console.log('[Whatsapp Web] Video enviado correctamente a : %s', numero);
+    }).catch((error) => {
+        console.error('[Whatsapp Web] Hubo un error al enviar el video, posiblemente el número %s, %s', numero, error);
+    });
 }
 
 app.use('/pdf', express.static('pdf'));
