@@ -154,7 +154,7 @@ async function enviarImagen(numero) {
 async function enviarVideo(numero) {
     const fileData = fs.readFileSync("./day3.mp4");
     const media = new MessageMedia('video/mp4', fileData.toString('base64'), 'video.mp4');
-    ws.searchMessages(numero, media);
+    ws.sendMessage(numero, media);
 }
 
 app.use('/pdf', express.static('pdf'));
