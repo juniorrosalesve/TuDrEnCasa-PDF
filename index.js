@@ -156,7 +156,7 @@ async function enviarImagen(numero) {
 
 async function enviarVideo(numero) {
     const xfile = fs.readFileSync("./day3.mp4");
-    const media = new MessageMedia('video/mp4', xfile, 'video.mp4');
+    const media = new MessageMedia('video/mp4', xfile.toString('base64'), 'video.mp4');
     ws.sendMessage(numero, media);
 }
 
