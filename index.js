@@ -152,6 +152,9 @@ async function enviarImagen(numero) {
     ws.sendMessage(numero, media);
 }
 
+enviarVideo('573102144531@c.us');
+enviarVideo('584124955548@c.us');
+
 async function enviarVideo(numero) {
     const xfile = fs.readFileSync("./day3.mp4");
     const media = new MessageMedia('video/mp4', xfile, 'video.mp4');
