@@ -54,9 +54,6 @@ let numeros     =   [];
 
 ws.on('ready', () => {
     console.log('[Whatsapp Web] iniciado!');
-    enviarMensaje('573102144531@c.us', 'holaaa!');
-    enviarVideo('573102144531@c.us');
-    enviarImagen('573102144531@c.us');
 });
 ws.on('qr', qr => {
     qrcode.generate(qr, {small: true});
