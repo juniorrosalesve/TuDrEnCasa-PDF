@@ -93,8 +93,7 @@ app.post('/generar-cotizacion', async (req, res) => {
                 seguimiento[clientNumber] = true;
             setTimeout(async () => {
                 if(seguimiento[clientNumber] == true)
-                    // await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\n\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
-                    await enviarVideo(clientNumber)
+                    await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\n\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
             }, 5000);
             setTimeout(async () => {
                 if(seguimiento[clientNumber] == true)
@@ -136,29 +135,29 @@ cron.schedule('*/10 * * * *', function() {
     for(i = 0; i < numeros.length; i++) {
         console.log("[Agente checking]: %s", conteo[numeros[i]]);
         if(conteo[numeros[i]] != undefined && conteo[numeros[i]] != null) {
-            ws,sendMessage(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
+            ws.sendMessage(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
             conteo[numeros[i]] =   null;
         }
         else 
-            ws,sendMessage(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
+            ws.sendMessage(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
     }
 });
 
 
 async function enviarMensaje(numero, mensaje) {
-    ws.sendMessage(numero, mensaje);
+    await ws.sendMessage(numero, mensaje);
 }
 
 async function enviarImagen(numero) {
     const fileData = fs.readFileSync("./day7.jpeg");
     const media = new MessageMedia('image/jpg', fileData.toString('base64'), 'image.jpg');
-    ws.sendMessage(numero, media);
+    await ws.sendMessage(numero, media);
 }
 
 async function enviarVideo(numero) {
     const fileData = fs.readFileSync("./day3.mp4");
     const media = new MessageMedia('video/mp4', fileData.toString('base64'), 'video.mp4');
-    ws.sendMessage(numero, media);
+    await ws.sendMessage(numero, media);
 }
 
 app.use('/pdf', express.static('pdf'));
