@@ -8,10 +8,15 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const multer  = require('multer');
 const cron = require('node-cron');
-const axios = require('axios');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
 
 const app = express()
 const port = 7774;
+
+const ws = new Client({
+    authStrategy: new LocalAuth()
+});
 
 var transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -43,9 +48,13 @@ let conteo  =   {};
 
 let numeros     =   [];
 
-const WHATSAPP_URL  =   "http://104.236.72.126:3000/api";
+ws.on('ready', () => {
+    console.log('[Whatsapp Web] iniciado!');
+});
+ws.on('qr', qr => {
+    qrcode.generate(qr, {small: true});
+});
 
-app.use('/pdf', express.static('pdf'));
 app.post('/generar-cotizacion', async (req, res) => {
     const data  =   req.body;
     createPDF(data[1], data[2]).catch((err) => console.log(err));
@@ -79,24 +88,24 @@ app.post('/generar-cotizacion', async (req, res) => {
                 if(seguimiento[clientNumber] == true)
                     await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener\n\nSi usted ya contrató o no está interesado en recibir más seguimientos, favor escribir la palabra: FINALIZAR');
             }, 5000);
-            // setTimeout(async () => {
-            //     if(seguimiento[clientNumber] == true)
-            //         await imagen1(clientNumber)
-            // }, 1 * 60 * 1000)
-            // setTimeout(async () => {
-            //     if(seguimiento[clientNumber] == true)
-            //         await imagen2(clientNumber)
-            // }, 2 * 60 * 1000)
-            // setTimeout(async () => {
-            //     if(seguimiento[clientNumber] == true)
-            //         await enviarMensaje(clientNumber, "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición.");
-            // }, 3 * 60 * 1000); 
-            // if(!checkNumberAgent(agentNumber))
-            //     numeros.push(agentNumber);
-            // if(conteo[agentNumber] == undefined || conteo[agentNumber] == null)
-            //     conteo[agentNumber] = data[0].name;
-            // else
-            //     conteo[agentNumber] = conteo[agentNumber] + ', ' + data[0].name;
+            setTimeout(async () => {
+                if(seguimiento[clientNumber] == true)
+                    await enviarVideo(clientNumber)
+            }, 1 * 60 * 1000)
+            setTimeout(async () => {
+                if(seguimiento[clientNumber] == true)
+                    await enviarImagen(clientNumber)
+            }, 2 * 60 * 1000)
+            setTimeout(async () => {
+                if(seguimiento[clientNumber] == true)
+                    await enviarMensaje(clientNumber, "Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 👨🏻‍⚕️🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso que usted requiera algún ajuste. Estamos a su disposición.");
+            }, 3 * 60 * 1000); 
+            if(!checkNumberAgent(agentNumber))
+                numeros.push(agentNumber);
+            if(conteo[agentNumber] == undefined || conteo[agentNumber] == null)
+                conteo[agentNumber] = data[0].name;
+            else
+                conteo[agentNumber] = conteo[agentNumber] + ', ' + data[0].name;
             return res.sendStatus(200);
         }
     });
@@ -106,54 +115,47 @@ app.listen(port, () => {
     console.log(`Cotizador tu drencasa corriendo http://localhost:${port}/`)
 });
 
-// wa.create().then(c => {
-//     client = c;
+ws.on('message_create', message => {
+    if(message.toLowerCase() == 'finalizar' && seguimiento[message.from])
+    {
+        console.log('[Cancelación] %s', message.from);
+        seguimiento[message.from] = false;
+        ws.sendMessage(message.from, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
+    }
+});
 
-//     client.onMessage(async message => {
-//         if (message.body.toLowerCase() === 'finalizar' && seguimiento[message.from]) {
-//             console.log('[Cancelación] %s', message.from);
-//             seguimiento[message.from] = false;
-//             await client.sendText(message.from, '¡Muchas gracias! Estamos para servirle 🌍👨🏻‍⚕️');
-//         }
-//         if(message.body == '!ping')
-//             await client.sendText(message.from, 'pong!');
-//     });
-// });
+cron.schedule('*/10 * * * *', function() {
+    for(i = 0; i < numeros.length; i++) {
+        console.log("[Agente checking]: %s", conteo[numeros[i]]);
+        if(conteo[numeros[i]] != undefined && conteo[numeros[i]] != null) {
+            enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
+            conteo[numeros[i]] =   null;
+        }
+        else 
+            enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
+    }
+});
 
-// cron.schedule('*/10 * * * *', function() {
-//     for(i = 0; i < numeros.length; i++) {
-//         console.log("[Agente checking]: %s", conteo[numeros[i]]);
-//         if(conteo[numeros[i]] != undefined && conteo[numeros[i]] != null) {
-//             enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Hemos notado que, durante esta semana, ha solicitado cotizaciones para los clientes: ("+conteo[numeros[i]]+") ¿Cómo podemos ayudarte para concretar esta afiliación? Estaremos atentos a su pronta respuesta.");
-//             conteo[numeros[i]] =   null;
-//         }
-//         else 
-//             enviarMensaje(numeros[i], "Estimado Aliado: Un placer saludarle en nombre del Departamento Comercial de Tu Dr. En Casa 👨🏻‍⚕️🏡, Esperamos que tengas un excelente fin de semana. Hemos notado que no has tenido actividad dentro de nuestro cotizador en línea, si necesitas ayuda o tienes alguna pregunta, estamos aquí para apoyarte.");
-//     }
-// });
 
 async function enviarMensaje(numero, mensaje) {
-    let data = {
-        chatId: numero,
-        text: mensaje,
-        session: 'default'
-    };
-    axios.post(`${WHATSAPP_URL}/sendText`, data)
-    .then((response) => {
-        console.log("[Mensaje Enviado] To %s", numero);
-    })
-    .catch((error) => {
-        console.error(error);
-    });
+    ws.sendMessage(numero, mensaje);
 }
 
-// async function imagen1(numero) {
-//     await client.sendImage(numero, './day3.png', 'image.jpg');
-// }
-// async function imagen2(numero) {
-//     await client.sendImage(numero, './day7.jpeg', 'image.jpg');
-// }
+async function enviarImagen(numero) {
+    const filePath = './day7.jpeg'; // Reemplaza esto con la ruta a tu imagen
+    const fileData = fs.readFileSync(filePath, { encoding: 'base64' });
+    const media = new MessageMedia('image/jpg', fileData);
+    await ws.sendMessage(numero, media);
+}
 
+async function enviarVideo(numero) {
+    const filePath = './day3.mp4'; // Reemplaza esto con la ruta a tu video
+    const fileData = fs.readFileSync(filePath, { encoding: 'base64' });
+    const media = new MessageMedia('video/mp4', fileData);
+    await ws.sendMessage(numero, media);
+}
+
+app.use('/pdf', express.static('pdf'));
 app.post('/testing-pdf', async (req, res) => {
     const data  =   req.body;
     const testingData   =   [
@@ -217,7 +219,6 @@ async function createPDF(data, params, testing = false) {
     else
         writeFileSync("./pdf/cotizacion_testing.pdf", await document.save());
 }
-
 function getStringDate() {
     let today = new Date();
 
@@ -234,12 +235,10 @@ function getStringDate() {
     }
     return dd + '/' + mm + '/' + yyyy;
 }
-
 function coordenates(i, m) {
     const data  =   i.split(",");
     return parseInt(data[m]);
 }
-
 function reemplazarVariables(mensaje, variables) {
     for (let variable in variables) {
         let valor = variables[variable];
@@ -248,7 +247,6 @@ function reemplazarVariables(mensaje, variables) {
     }
     return mensaje;
 }
-
 function checkNumberAgent(n) {
     let exists  =   false;
     for(var i = 0; i < numeros.length; i++) {
@@ -259,3 +257,5 @@ function checkNumberAgent(n) {
     }
     return exists;
 }
+
+ws.initialize();
