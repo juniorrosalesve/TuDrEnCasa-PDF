@@ -148,14 +148,14 @@ async function enviarImagen(numero) {
     const filePath = './day7.jpeg'; // Reemplaza esto con la ruta a tu imagen
     const fileData = fs.readFileSync(filePath, { encoding: 'base64' });
     const media = new MessageMedia('image/jpg', fileData);
-    await ws.sendMessage(numero, media);
+    ws.sendMessage(numero, media);
 }
 
 async function enviarVideo(numero) {
     const filePath = './day3.mp4'; // Reemplaza esto con la ruta a tu video
     const fileData = fs.readFileSync(filePath, { encoding: 'base64' });
     const media = new MessageMedia('video/mp4', fileData);
-    await ws.sendMessage(numero, media);
+    ws.sendMessage(numero, media);
 }
 
 app.use('/pdf', express.static('pdf'));
