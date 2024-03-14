@@ -17,8 +17,9 @@ const port = 7774;
 const ws = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
+        executablePath: '/usr/bin/chromium-browser',
         headless: true,
-        args: ['--no-sandbox']
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
     }
 });
 
@@ -151,13 +152,10 @@ async function enviarMensaje(numero, mensaje) {
 async function enviarImagen(numero) {
     const fileData = fs.readFileSync("./day7.jpeg");
     const media = new MessageMedia('image/jpg', fileData.toString('base64'), 'image.jpg');
-    await ws.sendMessage(numero, media);
 }
 
 async function enviarVideo(numero) {
-    const xfile = fs.readFileSync("./day3.mp4");
-    const media = new MessageMedia('video/mp4', xfile.toString('base64'), 'video.mp4');
-    await ws.sendMessage(numero, media);
+    await ws.sendMessage(numero, MessageMedia.fromFilePath('./day3.mp4'));
 }
 
 app.use('/pdf', express.static('pdf'));
