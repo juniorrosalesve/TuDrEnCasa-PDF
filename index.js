@@ -18,8 +18,7 @@ const ws = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
         executablePath: '/usr/bin/chromium-browser',
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: ['--no-sandbox'],
     }
 });
 
