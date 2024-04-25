@@ -56,13 +56,7 @@ ws.on('ready', () => {
     console.log('[Whatsapp Web] iniciado!');
 });
 ws.on('qr', qr => {
-    qrcode.toFile('./qr.png', qr, function (err) {
-        if (err) {
-            console.error(err);
-        } else {
-            console.log('¡El código QR se ha guardado en qr.png!');
-        }
-    });
+    qrcode.generate(qr, {small: true});
 });
 
 app.post('/generar-cotizacion', async (req, res) => {
