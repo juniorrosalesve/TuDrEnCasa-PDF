@@ -56,7 +56,9 @@ ws.on('ready', () => {
     console.log('[Whatsapp Web] iniciado!');
 });
 ws.on('qr', qr => {
-    qrcode.generate(qr, {small: true});
+    qrcode.toString(qr, { type: 'terminal', scale: 1 }, function (err, url) {
+        console.log(url)
+    })
 });
 
 app.post('/generar-cotizacion', async (req, res) => {
