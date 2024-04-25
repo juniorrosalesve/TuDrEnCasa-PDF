@@ -56,8 +56,9 @@ ws.on('ready', () => {
     console.log('[Whatsapp Web] iniciado!');
 });
 ws.on('qr', qr => {
-    qrcode.toString(qr, { type: 'terminal', scale: 1 }, function (err, url) {
-        console.log(url)
+    qrcode.toFile('./wsqrcode.png', qr, function (err) {
+        if (err) throw err
+        console.log('¡Se ha guardado el código QR en qr.png!');
     })
 });
 
