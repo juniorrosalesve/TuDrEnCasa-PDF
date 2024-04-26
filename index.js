@@ -10,14 +10,19 @@ const multer  = require('multer');
 const cron = require('node-cron');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const qrimage = require('qr-image');
 
 const app = express()
 const port = 7774;
 
 const ws = new Client({
     authStrategy: new LocalAuth(),
+    webVersionCache: {
+        type: "remote",
+        remotePath:
+          "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
+    },
     puppeteer: {
-        executablePath: '/usr/bin/google-chrome-stable',
         args: ['--no-sandbox']
     }
 });
@@ -56,7 +61,8 @@ ws.on('ready', () => {
     console.log('[Whatsapp Web] iniciado!');
 });
 ws.on('qr', qr => {
-    qrcode.generate(qr, {small: true});
+    var qr_svg = qrimage.image(qr, { type: 'png' });
+    qr_svg.pipe(require('fs').createWriteStream('i_love_qr.png'));
 });
 
 app.post('/generar-cotizacion', async (req, res) => {
