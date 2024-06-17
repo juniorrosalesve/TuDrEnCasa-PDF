@@ -32,7 +32,7 @@ var transporter = nodemailer.createTransport({
     port: 465,
     auth: {
         user: "cotizacionestdg.ve@gmail.com",
-        pass: "aocomxuabystytbh"
+        pass: "tztuwuzdaztgmgud"
     }
 });
 
@@ -68,7 +68,6 @@ ws.on('qr', qr => {
 app.post('/generar-cotizacion', async (req, res) => {
     const data  =   req.body;
     createPDF(data[1], data[2]).catch((err) => console.log(err));
-
     let mailInfo    =   reemplazarVariables(data[3].body, data[0]);
     var mailOptions = {
         from: 'TuDrEnCasa Cotización <cotizacionestdg.ve@gmail.com>',
@@ -120,6 +119,7 @@ app.post('/generar-cotizacion', async (req, res) => {
             return res.sendStatus(200);
         }
     });
+    return res.sendStatus(200);
 });
 
 app.listen(port, () => {
@@ -208,7 +208,7 @@ async function createPDF(data, structurePdf, testing = false) {
         coordinates.push({ x: parseFloat(match[1]), y: parseFloat(match[2]), op: match[3], val: match[4], fixedVal: match[5], varVal: match[6] });
     }
     
-    console.log(coordinates);
+    // console.log(coordinates);
     usePage.moveTo(165, 764);
     usePage.drawText(getStringDate(), {
         size: 12
