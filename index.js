@@ -83,8 +83,8 @@ app.post('/generar-cotizacion', async (req, res) => {
             }
         ]
     };
-    const clientNumber      =   data[0].phone + '@c.us';
-    const agentNumber       =   data[0].agentPhone + '@c.us';
+    // const clientNumber      =   data[0].phone + '@c.us';
+    // const agentNumber       =   data[0].agentPhone + '@c.us';
 
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
@@ -92,30 +92,31 @@ app.post('/generar-cotizacion', async (req, res) => {
             return res.sendStatus(500);
         } else {
             console.log("[Nueva solicitud] De [%s - %s] para [%s - %s]", data[0].agent, agentNumber, data[0].name, clientNumber);
-            if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
-                seguimiento[clientNumber] = true;
-            setTimeout(async () => {
-                if(seguimiento[clientNumber] == true)
-                    await enviarImagen(clientNumber)    
-            }, 5000);
-            setTimeout(async () => {
-                if(seguimiento[clientNumber] == true)
-                    await enviarVideo(clientNumber)
-            }, 3 * 24 * 60 * 60 * 1000)
-            setTimeout(async () => {
-                if(seguimiento[clientNumber] == true)
-                    await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener.');
-            }, 5 * 24 * 60 * 60 * 1000)
-            setTimeout(async () => {
-                if(seguimiento[clientNumber] == true)
-                    await enviarMensaje(clientNumber, 'Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso de que usted requiera algún ajuste. Estamos a su disposición.');
-            }, 7 * 24 * 60 * 60 * 1000); 
-            if(!checkNumberAgent(agentNumber))
-                numeros.push(agentNumber);
-            if(conteo[agentNumber] == undefined || conteo[agentNumber] == null)
-                conteo[agentNumber] = data[0].name;
-            else
-                conteo[agentNumber] = conteo[agentNumber] + ', ' + data[0].name;
+        
+            // if(seguimiento[clientNumber] == undefined || seguimiento[clientNumber] == false)
+            //     seguimiento[clientNumber] = true;
+            // setTimeout(async () => {
+            //     if(seguimiento[clientNumber] == true)
+            //         await enviarImagen(clientNumber)    
+            // }, 5000);
+            // setTimeout(async () => {
+            //     if(seguimiento[clientNumber] == true)
+            //         await enviarVideo(clientNumber)
+            // }, 3 * 24 * 60 * 60 * 1000)
+            // setTimeout(async () => {
+            //     if(seguimiento[clientNumber] == true)
+            //         await enviarMensaje(clientNumber, 'Estimado cliente: Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 🏡. Hemos notado que recientemente ha solicitado una cotización: ¿Presenta alguna pregunta o necesita ayuda para concluir su compra? Quedo a su disposición y atento a cualquier consulta que pueda tener.');
+            // }, 5 * 24 * 60 * 60 * 1000)
+            // setTimeout(async () => {
+            //     if(seguimiento[clientNumber] == true)
+            //         await enviarMensaje(clientNumber, 'Un placer saludarle en nombre del Departamento de Cotizaciones de Tu Dr. En Casa 🏡. Hemos notado que está próximo a vencerse la fecha de vigencia de la cotización emitida para usted, estamos comprometidos en ofrecer un servicio de excelencia para su tranquilidad. Le recordamos que ofrecemos planes diseñados a la medida, en caso de que usted requiera algún ajuste. Estamos a su disposición.');
+            // }, 7 * 24 * 60 * 60 * 1000); 
+            // if(!checkNumberAgent(agentNumber))
+            //     numeros.push(agentNumber);
+            // if(conteo[agentNumber] == undefined || conteo[agentNumber] == null)
+            //     conteo[agentNumber] = data[0].name;
+            // else
+            //     conteo[agentNumber] = conteo[agentNumber] + ', ' + data[0].name;
             return res.sendStatus(200);
         }
     });
@@ -176,20 +177,15 @@ async function enviarVideo(numero) {
 
 app.use('/pdf', express.static('pdf'));
 app.post('/testing-pdf', async (req, res) => {
-    const data  =   req.body;
+    const structure = req.body.structure;
+    console.log(structure); //justo acá
     const testingData   =   [
         "Nombre de Prueba",
         "Dirección de Prueba",
-        "0414-1234567",
-        "user@mail.com",
-        "Plan de Prueba",
-        "Agente de Prueba",
-        "0414-7654321",
-        "agent@mail.com",
         5000,
         10000
     ];
-    createPDF(testingData, data, true).catch((err) => console.log(err));
+    createPDF(testingData, structure, true).catch((err) => console.log(err));
     return res.sendStatus(200);
 });
 app.post('/upload-pdf', upload.single('file'), (req, res) => {
@@ -199,36 +195,52 @@ app.post('/upload-pdf', upload.single('file'), (req, res) => {
     res.sendStatus(200);
 });
 
-async function createPDF(data, params, testing = false) {
+async function createPDF(data, structurePdf, testing = false) {
+    console.log(structurePdf); // Para depurar
     const document  =   await PDFDocument.load(readFileSync("./pdf/cotizacion.pdf"));
     const usePage   =   document.getPage(1);
+
+    const regex = /(\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?),\s*([\/*]?)(\d*),\s*(\d*),\s*(\d*)/g;
+    let match;
+    const coordinates = [];
+
+    while ((match = regex.exec(structurePdf)) !== null) {
+        coordinates.push({ x: parseFloat(match[1]), y: parseFloat(match[2]), op: match[3], val: match[4], fixedVal: match[5], varVal: match[6] });
+    }
     
-    for(let i = 0; i < params.length; i++) {
-        if(i <= 8) {
-            usePage.moveTo(coordenates(params[i], 1), coordenates(params[i], 0));
-            if(i == 0)
-                usePage.drawText(getStringDate(), {
-                    size: 11,
-                });
-            else
-                usePage.drawText(data[i-1], {
-                    size: 11,
-                });
+    console.log(coordinates);
+    usePage.moveTo(165, 764);
+    usePage.drawText(getStringDate(), {
+        size: 12
+    });
+    for(let i = 0; i < coordinates.length; i++) {
+        const { x, y, op, val, fixedVal, varVal } = coordinates[i];
+        let textToDraw;
+    
+        if(fixedVal !== '0') {
+            textToDraw = fixedVal;
+        } else {
+            if(varVal != '0')
+                textToDraw  =   data[varVal];
+            else 
+                textToDraw = data[i];
         }
-        else {
-            if(i < 12)
-                total       =   data[8];
-            else
-                total       =   data[9];
-            if(i == 10 || i == 13)
-                total     =   (total / 2);
-            if(i == 11 || i == 14)
-                total     =   (total / 4);
-            usePage.moveTo(coordenates(params[i], 1), coordenates(params[i], 0));
-            usePage.drawText("$" + Number(total).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}), {
-                size: 11,
-            });
+
+        if(op && val) {
+            const numericVal = parseFloat(val);
+            const dataVal = parseFloat(textToDraw);
+            if(op === '*') {
+                textToDraw = (dataVal * numericVal).toFixed(2);
+            } else if(op === '/') {
+                textToDraw = (dataVal / numericVal).toFixed(2);
+            }
+            textToDraw  =   "$"+textToDraw;
         }
+
+        usePage.moveTo(y, x);
+        usePage.drawText(textToDraw, {
+            size: 12 // Puedes ajustar el tamaño según sea necesario
+        });
     }
 
     document.setTitle(getStringDate()+" Cotizacion en linea cotizador -TDEC");
@@ -277,4 +289,4 @@ function checkNumberAgent(n) {
     return exists;
 }
 
-ws.initialize();
+// ws.initialize();
