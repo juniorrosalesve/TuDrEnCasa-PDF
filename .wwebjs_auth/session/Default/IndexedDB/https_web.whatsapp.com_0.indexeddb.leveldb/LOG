@@ -1,0 +1,13 @@
+2024/08/20-13:45:41.845 8504 Reusing MANIFEST C:\Users\junio\Documents\NodejsProjects\TuDrEnCasa-PDF\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2024/08/20-13:45:41.845 8504 Recovering log #182
+2024/08/20-13:45:41.873 8504 Reusing old log C:\Users\junio\Documents\NodejsProjects\TuDrEnCasa-PDF\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000182.log 
+2024/08/20-13:45:42.919 985c Level-0 table #187: started
+2024/08/20-13:45:42.925 985c Level-0 table #187: 357935 bytes OK
+2024/08/20-13:45:42.926 985c Delete type=0 #182
+2024/08/20-13:45:42.926 985c Manual compaction at level-0 from '\x00F\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00G\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/08/20-13:45:43.897 5294 Compacting 1@1 + 1@2 files
+2024/08/20-13:45:43.933 5294 Generated table #188@1: 37909 keys, 1782072 bytes
+2024/08/20-13:45:43.933 5294 Compacted 1@1 + 1@2 files => 1782072 bytes
+2024/08/20-13:45:43.934 5294 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/08/20-13:45:43.934 5294 Delete type=2 #184
+2024/08/20-13:45:43.934 5294 Delete type=2 #187
